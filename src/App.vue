@@ -2,18 +2,19 @@
 export default {
   data() {
     return {
-      tasks: [
-          {
-            label: 'Feed the cat',
-            done: 0
-          },      
-          {
-            label: 'Pick up the milk',
-            done: 1
-          }        
-      ]
+      task: '',
+      tasks: []
     }
-  }
+  },
+  methods: {
+    addTask() {
+      this.tasks.push({ 
+        label: this.task, 
+        done: false,
+      });      
+      this.task = '';
+    },
+  },      
 }
 </script>
 
@@ -32,6 +33,12 @@ export default {
 
           <div class="card">
               <div class="card-body p-5">
+
+                <form class="d-flex mb-1">
+                  <input @keydown.enter="addTask" v-model="task" type="text" class="form-control me-2" placeholder="New task..." />
+                  <button type="submit" disabled class="d-none">Prevent form submit from enter</button>
+                  <button @click.prevent="addTask" class="btn btn-primary"><i class="fas fa-plus"></i></button>
+                </form>                
 
                 <div class="d-flex align-items-center mt-4">
                   <h4 class="flex-fill m-0">Tasks</h4>
