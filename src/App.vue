@@ -9,10 +9,14 @@ export default {
   methods: {
     addTask() {
       this.tasks.push({ 
+        id: new Date().valueOf(), 
         label: this.task, 
         done: false,
       });      
       this.task = '';
+    },
+    deleteTask(taskId) {
+      this.tasks.splice(this.tasks.findIndex(task => task.id === taskId), 1)
     },
   },      
 }
@@ -49,7 +53,12 @@ export default {
                     <a class="btn btn-sm me-2 btn-outline-secondary">
                       <i class="fas fa-check text-white"></i>
                     </a>
+                    
                     <p class="flex-grow-1 mb-0 text-secondary">{{ task.label }}</p>  
+
+                    <a @:click.prevent="deleteTask(task.id)" class="btn btn-sm text-danger">
+                      <i class="fas fa-trash"></i>
+                    </a>                    
                   </div>
                 </div>
 
