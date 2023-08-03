@@ -3,22 +3,32 @@ export default {
   data() {
     return {
       task: '',
-      tasks: []
+      tasks: [],
+      error: '',
     }
   },
   methods: {
     addTask() {
-      this.tasks.push({ 
-        id: new Date().valueOf(), 
-        label: this.task, 
-        done: false,
-      });      
-      this.task = '';
+      this.error = '';
+
+      if(this.validate(this.task)) {
+        this.tasks.push({
+          id: new Date().valueOf(),
+          label: this.task,
+          done: false,
+        });
+        this.task = '';
+      } else {
+        this.error = 'Please enter the task.';
+      }
     },
     deleteTask(taskId) {
       this.tasks.splice(this.tasks.findIndex(task => task.id === taskId), 1)
     },
-  },      
+    validate(task) {
+      return task.length > 0;
+    },
+  },
 }
 </script>
 
@@ -39,14 +49,18 @@ export default {
               <div class="card-body p-5">
 
                 <form class="d-flex mb-1">
-                  <input @keydown.enter="addTask" v-model="task" type="text" class="form-control me-2" placeholder="New task..." />
+                  <input @keydown.enter="addTask" v-model="task" type="text" class="form-control me-2" :class="{ 'is-invalid': error.length }" placeholder="New task..." />
                   <button type="submit" disabled class="d-none">Prevent form submit from enter</button>
                   <button @click.prevent="addTask" class="btn btn-primary"><i class="fas fa-plus"></i></button>
-                </form>                
+                </form>
+
+                <div v-show="error.length > 0">
+                    <span class="text-danger">{{ error }}</span>
+                </div>
 
                 <div class="d-flex align-items-center mt-4">
                   <h4 class="flex-fill m-0">Tasks</h4>
-                </div>                  
+                </div>
 
                 <div v-show="tasks.length > 0" class="list-group mt-3">
                   <div v-for="task in tasks" class="list-group-item list-group-item-action d-flex align-items-center">
@@ -58,7 +72,7 @@ export default {
 
                     <a @:click.prevent="deleteTask(task.id)" class="btn btn-sm text-danger">
                       <i class="fas fa-trash"></i>
-                    </a>                    
+                    </a>
                   </div>
                 </div>
 
