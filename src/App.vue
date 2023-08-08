@@ -90,17 +90,17 @@ export default {
 
                         <ul class="nav nav-underline flex-fill justify-content-end">
                             <li class="nav-item">
-                                <a class="nav-link" @click.prevent="filterTask( '' )" href="#">
+                                <a @click.prevent="filterTask( '' )" class="nav-link" :class="{ 'active': filter == '' }" href="#">
                                     All
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" @click.prevent="filterTask( 'pending' )" href="#">
+                                <a  @click.prevent="filterTask( 'pending' )" class="nav-link" :class="{ 'active': filter == 'pending' }" href="#">
                                     Pending
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" @click.prevent="filterTask( 'done' )" href="#">
+                                <a @click.prevent="filterTask( 'done' )" class="nav-link" :class="{ 'active': filter == 'done' }" href="#">
                                     Done
                                 </a>
                             </li>
