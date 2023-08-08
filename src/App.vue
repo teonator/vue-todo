@@ -9,7 +9,7 @@ export default {
         }
     },
     computed: {
-        taskFilter: function(taskFilter) {
+        taskFilter: function() {
             let _taskFilter = this.filter;
 
             return this.tasks.filter(function(task) {
@@ -24,7 +24,7 @@ export default {
                         return true;
                 }
             });
-        }
+        },
     },
     methods: {
         addTask() {
@@ -51,6 +51,20 @@ export default {
         },
         filterTask(taskFilter) {
             this.filter = taskFilter;
+        },
+        countTask: function(taskFilter) {
+            return this.tasks.filter(function(task) {
+                switch( taskFilter ) {
+                    case 'pending':
+                        return !task.done;
+
+                    case 'done':
+                        return task.done;
+
+                    default:
+                        return true;
+                }
+            }).length;
         },
         validate(task) {
             return task.length > 0;
@@ -91,17 +105,17 @@ export default {
                         <ul class="nav nav-underline flex-fill justify-content-end">
                             <li class="nav-item">
                                 <a @click.prevent="filterTask( '' )" class="nav-link" :class="{ 'active': filter == '' }" href="#">
-                                    All
+                                    All ({{ countTask( '' ) }})
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a  @click.prevent="filterTask( 'pending' )" class="nav-link" :class="{ 'active': filter == 'pending' }" href="#">
-                                    Pending
+                                    Pending ({{ countTask( 'pending' ) }})
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a @click.prevent="filterTask( 'done' )" class="nav-link" :class="{ 'active': filter == 'done' }" href="#">
-                                    Done
+                                    Done ({{ countTask( 'done' ) }})
                                 </a>
                             </li>
                         </ul>
