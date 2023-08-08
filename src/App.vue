@@ -5,6 +5,25 @@ export default {
             task: '',
             tasks: [],
             error: '',
+            filter: '',
+        }
+    },
+    computed: {
+        taskFilter: function(taskFilter) {
+            let _taskFilter = this.filter;
+
+            return this.tasks.filter(function(task) {
+                switch( _taskFilter ) {
+                    case 'pending':
+                        return !task.done;
+
+                    case 'done':
+                        return task.done;
+
+                    default:
+                        return true;
+                }
+            });
         }
     },
     methods: {
@@ -29,6 +48,9 @@ export default {
         },
         deleteTask(taskId) {
             this.tasks.splice(this.tasks.findIndex(task => task.id === taskId), 1)
+        },
+        filterTask(taskFilter) {
+            this.filter = taskFilter;
         },
         validate(task) {
             return task.length > 0;
@@ -65,10 +87,28 @@ export default {
 
                     <div class="d-flex align-items-center mt-4">
                         <h4 class="flex-fill m-0">Tasks</h4>
+
+                        <ul class="nav nav-underline flex-fill justify-content-end">
+                            <li class="nav-item">
+                                <a class="nav-link" @click.prevent="filterTask( '' )" href="#">
+                                    All
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click.prevent="filterTask( 'pending' )" href="#">
+                                    Pending
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" @click.prevent="filterTask( 'done' )" href="#">
+                                    Done
+                                </a>
+                            </li>
+                        </ul>
                     </div>
 
-                    <div v-show="tasks.length > 0" class="list-group mt-3">
-                        <div v-for="task in tasks" class="list-group-item list-group-item-action d-flex align-items-center">
+                    <div v-show="taskFilter.length > 0" class="list-group mt-3">
+                        <div v-for="task in taskFilter" class="list-group-item list-group-item-action d-flex align-items-center">
                             <a @:click.prevent="editTask(task.id)" class="btn btn-sm me-2" :class="[task.done ? 'btn-outline-success' : 'btn-outline-secondary']">
                                 <i class="fas fa-check" :class="{ 'text-white': !task.done }"></i>
                             </a>
@@ -81,7 +121,7 @@ export default {
                         </div>
                     </div>
 
-                    <p v-show="tasks.length == 0" class="mt-4 text-center">Hooray! You don't have any task.</p>
+                    <p v-show="taskFilter.length == 0" class="mt-4 text-center">Hooray! You don't have {{ filter }} any task.</p>
 
                 </div>
             </div>
